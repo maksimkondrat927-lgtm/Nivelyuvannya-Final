@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Нівелювання.тах</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+--bg:#f7f7f5;--card:#fff;--tx:#2b2b29;--mut:#787774;--ln:#e6e5e1;--ac:#2383e2;--acs:rgba(35,131,226,.14);--dn:#d44c47;--dw:#d44c47;--fld:#fff;--pt:#2b2b29;--onac:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#191919;--card:#202020;--tx:#e6e6e4;--mut:#9b9a97;--ln:#2f2f2f;--ac:#529cca;--acs:rgba(82,156,202,.18);--dn:#e06c66;--dw:#e06c66;--fld:#191919;--pt:#e6e6e4;--onac:#06201e}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#191919;--card:#202020;--tx:#e6e6e4;--mut:#9b9a97;--ln:#2f2f2f;--ac:#529cca;--acs:rgba(82,156,202,.18);--dn:#e06c66;--dw:#e06c66;--fld:#191919;--pt:#e6e6e4;--onac:#06201e}
+body.c1{--bg:#4f8f6b;--ac:#2a8a5a;--acs:rgba(42,138,90,.16);--dw:#c2410c;--pt:#fff;--onac:#fff}
+body.c2{--bg:#e8c556;--ac:#9a6b05;--acs:rgba(154,107,5,.16);--dw:#4a4a4a;--pt:#1b1b1b;--onac:#fff}
+body.c3{--bg:#c9605a;--ac:#d1453b;--acs:rgba(209,69,59,.16);--dw:#4a4a4a;--pt:#fff;--onac:#fff}
+body.c4{--bg:#5a86c6;--ac:#2f6fd8;--acs:rgba(47,111,216,.16);--dw:#d9480f;--pt:#fff;--onac:#fff}
+body.c5{color-scheme:dark;--bg:#0e0e0e;--card:#1a1a1a;--tx:#ececec;--mut:#9a9a9a;--ln:#333;--fld:#111;--ac:#f0f0f0;--acs:rgba(240,240,240,.14);--dw:#f08a5d;--pt:#f0f0f0;--onac:#111}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:560px;margin:0 auto;padding:12px 12px 40px}
+header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+h1{flex:1;margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--pt)}
+button{font:inherit;color:inherit;border:1px solid var(--ln);background:var(--card);border-radius:8px;min-height:44px;padding:0 14px;cursor:pointer}
+button:disabled{opacity:.4}
+button.pri,.tabs button.on,#addp,.big,.seg button.on{background:var(--ac);border-color:var(--ac);color:var(--onac)}
+button.pri{font-weight:600}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.err{background:#d44c47;color:#fff;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:10px}
+.mw{position:relative}
+#more{width:44px;padding:0;font-size:22px}
+.menu{display:none;position:absolute;right:0;top:48px;min-width:200px;padding:4px;background:var(--card);border:1px solid var(--ln);border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.12);z-index:4}
+.menu.show{display:block}
+.menu button{display:block;width:100%;text-align:left;border:0;background:none}
+.bar{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.tabs{flex:1;min-width:0;display:flex;gap:6px;overflow-x:auto}
+.tabs button{white-space:nowrap;flex:none}
+#addp{position:sticky;left:0;z-index:1;width:44px;padding:0;font-size:22px}
+#undo,#redo{width:44px;padding:0;font-size:20px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;box-shadow:0 0 0 1.5px rgba(255,255,255,.85)}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:12px;margin-bottom:10px}
+.empty{padding:28px 12px;text-align:center;color:var(--mut);font-size:14px}
+.grid{display:grid;grid-template-columns:1.1fr 1.3fr 1.2fr;gap:8px;align-items:start}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:3px}
+input,textarea{width:100%;font:inherit;font-size:18px;min-height:48px;padding:0 10px;border:1px solid var(--ln);border-radius:8px;background:var(--fld);color:var(--tx)}
+.seg{display:flex;gap:6px;margin-top:6px}
+.seg button{flex:1;min-height:40px;padding:0;font-size:20px}
+.pw{display:flex;gap:4px;position:relative}
+.pw input{min-width:0;flex:1;color:var(--dn);font-weight:600}
+.pw button{width:36px;padding:0;min-height:48px}
+.pl{display:none;position:absolute;left:0;right:0;top:52px;background:var(--card);border:1px solid var(--ln);border-radius:8px;z-index:3;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.pl.show{display:block}
+.pl button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--dn);font-weight:600}
+.pe{padding:8px;color:var(--mut);font-size:14px}
+.prev{font-size:13px;color:var(--ac);min-height:18px;margin-top:3px}
+.msg{font-size:14px;color:var(--dn);min-height:20px;margin:4px 0;white-space:pre-line}
+.row2{display:flex;gap:8px;margin-top:6px}
+.row2 .pri,.row2.eq button{flex:1}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th{font-weight:500;font-size:13px;color:var(--mut);text-align:left;padding:4px 6px}
+td{padding:0;border-top:1px solid var(--ln)}
+td>div{padding:11px 6px;min-height:44px}
+tr.t td>div{color:var(--mut)}
+tr.ed td{background:var(--acs)}
+td.num,th.num{text-align:right}
+td.pole>div,.wr{color:var(--dn);font-weight:600}
+td.x{width:44px}
+td.x button{border:0;background:none;width:44px;min-height:44px;padding:0;color:var(--mut);font-size:20px}
+.stat{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--mut);margin-bottom:6px;flex-wrap:wrap}
+.stat b{color:var(--tx);font-weight:600}
+.chart{overflow-x:auto;border:1px solid var(--ln);border-radius:8px;background:var(--fld)}
+.chart svg{display:block}
+.chart .up{stroke:var(--ac)}.chart .dn{stroke:var(--dw)}
+.chart circle{fill:var(--card);stroke:var(--tx);stroke-width:2;cursor:pointer}
+.chart circle.pk{fill:var(--tx)}
+.chart circle.sel{stroke:var(--ac);stroke-width:3}
+.sel-info{min-height:22px;font-size:14px;margin-top:6px}
+.foot{margin-top:4px}
+#del{width:100%;background:var(--card);border-color:var(--dn);color:var(--dn)}
+.dok{background:#d44c47;border-color:#d44c47;color:#fff;font-weight:600}
+.dno{background:#2a8a5a;border-color:#2a8a5a;color:#fff;font-weight:600}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:5}
+.ov.mid{align-items:center}
+.ov.show{display:flex}
+.ov .card{width:100%;max-width:560px;margin:0}
+.newc h2{margin:0 0 12px;font-size:18px}
+.newc p{margin:0 0 12px}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;min-height:200px;padding:10px;resize:none}
+.sws{display:flex;gap:10px}
+.sw{width:44px;height:44px;padding:0;border-radius:50%;background:var(--card);border:2px solid var(--ln)}
+.sw[data-c="1"]{background:#4f8f6b}.sw[data-c="2"]{background:#e8c556}.sw[data-c="3"]{background:#c9605a}.sw[data-c="4"]{background:#5a86c6}.sw[data-c="5"]{background:#111}
+.sw.on{border-color:var(--tx);border-width:3px}
+.big{display:block;margin:14px auto 6px;width:64px;height:64px;padding:0;border-radius:50%;font-size:34px}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Нівелювання.тах</h1>
+    <div class="mw">
+      <button id="more" aria-label="Меню">⋮</button>
+      <div class="menu" id="menu">
+        <button id="mset">Налаштування сторінки</button>
+        <button id="exp">Експорт</button>
+        <button id="imp">Імпорт</button>
+      </div>
+    </div>
+  </header>
+  <div class="err" id="err" style="display:none"></div>
+  <div class="bar">
+    <div class="tabs" id="tabs"></div>
+    <button id="undo" aria-label="Назад" title="Назад">↶</button>
+    <button id="redo" aria-label="Вперед" title="Вперед">↷</button>
+  </div>
+  <div class="card empty" id="c0">Немає створених нівелювань. Натисніть +, щоб створити перше.</div>
+
+  <div class="card" id="cf">
+    <div class="grid">
+      <div>
+        <label for="n">Пікет</label>
+        <input id="n" autocomplete="off" autocapitalize="characters">
+        <div class="seg"><button id="dm" aria-label="Нумерація на спад">−</button><button id="dp" aria-label="Нумерація на зростання">+</button></div>
+      </div>
+      <div><label for="h">Висота</label><input id="h" inputmode="decimal" autocomplete="off"></div>
+      <div>
+        <label for="p">Віха</label>
+        <div class="pw"><input id="p" inputmode="decimal" autocomplete="off"><button id="pd" aria-label="Попередні віхи">▾</button><div class="pl" id="pl"></div></div>
+      </div>
+    </div>
+    <div class="prev" id="prev"></div>
+    <div class="msg" id="msg"></div>
+    <div class="row2"><button class="pri" id="add">Записати</button><button id="cancel" style="display:none">Скасувати</button></div>
+  </div>
+
+  <div class="card" id="ct">
+    <table>
+      <thead><tr><th class="num">№</th><th>Пікет</th><th class="num">Висота</th><th class="num">Віха</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="card" id="cc">
+    <div class="stat" id="stat"></div>
+    <div class="chart" id="chart"></div>
+    <div class="sel-info" id="sel"></div>
+  </div>
+
+  <div class="foot" id="foot"><button id="del">Видалити сторінку</button></div>
+</main>
+
+<div class="ov mid" id="ov3">
+  <div class="card newc">
+    <h2>Нове нівелювання</h2>
+    <label for="nn">Назва або дата</label>
+    <input id="nn" autocomplete="off">
+    <button type="button" id="nd" style="min-height:36px;margin-top:6px">Підставити сьогоднішню дату</button>
+    <label style="margin-top:12px">Колір фону</label>
+    <div class="sws" id="nsw"></div>
+    <div class="msg" id="nm"></div>
+    <button class="big pri" id="nok" aria-label="Створити">+</button>
+    <div class="row2"><button id="nc">Закрити</button></div>
+  </div>
+</div>
+
+<div class="ov mid" id="ov4">
+  <div class="card newc">
+    <h2>Налаштування сторінки</h2>
+    <label for="pn">Назва сторінки</label>
+    <input id="pn" autocomplete="off">
+    <label style="margin-top:12px">Колір фону</label>
+    <div class="sws" id="psw"></div>
+    <div class="row2"><button class="pri" id="pc">Готово</button></div>
+  </div>
+</div>
+
+<div class="ov mid" id="ov5">
+  <div class="card newc">
+    <p id="ip"></p>
+    <div class="row2"><button class="pri" id="ik">Зрозуміло</button></div>
+  </div>
+</div>
+
+<div class="ov mid" id="ov6">
+  <div class="card newc">
+    <p id="dq"></p>
+    <div class="row2 eq"><button class="dok" id="dok">Видалити</button><button class="dno" id="dno">Скасувати</button></div>
+  </div>
+</div>
+
+<div class="ov" id="ov2">
+  <div class="card">
+    <label for="in">Назва нової сторінки</label>
+    <input id="in" autocomplete="off" placeholder="Імпорт">
+    <label for="it" style="margin-top:8px">Вставте текст, скопійований з експорту</label>
+    <textarea id="it"></textarea>
+    <div class="msg" id="im"></div>
+    <div class="row2"><button class="pri" id="imk">Створити сторінку</button><button id="imc">Закрити</button></div>
+  </div>
+</div>
+
+<div class="ov" id="ov">
+  <div class="card">
+    <label for="out">Текст для камералки (пікет, висота, віха)</label>
+    <textarea id="out" readonly></textarea>
+    <div class="row2"><button class="pri" id="copy">Копіювати</button><button id="close">Закрити</button></div>
+    <div class="prev" id="cmsg"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+var MAX=10;
+var X={n:0,order:[],cur:''},PG={},edit=-1,selIdx=-1,ack='',nc=0,bad=false,loadMsg='';
+var DOT=['','#4f8f6b','#e0b72a','#c9605a','#5a86c6','#111'];
+var SWN=['Без кольору','Зелений','Жовтий','Червоний','Синій','Чорний'];
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function isT(n){return /^[PpРрПп]\s*\d+$/.test(n.trim())}
+
+/*DATA*/
+var KI='tah2:idx',KP='tah2:p:',KB='tah2:b:';
+function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function put(k,v){try{localStorage.setItem(k,v);return true}catch(e){bad=true;return false}}
+function rm(k){try{localStorage.removeItem(k)}catch(e){}}
+function done(){
+  var t=bad?'Увага: дані не вдалося зберегти. Зробіть експорт і звільніть пам’ять телефона.':loadMsg,b=$('#err');
+  b.textContent=t;b.style.display=t?'':'none';bad=false;
+}
+function P(){return PG[X.cur]}
+function savePage(p){var old=get(KP+p.id);if(old)put(KB+p.id,old);put(KP+p.id,JSON.stringify(p))}
+function saveIdx(){put(KI,JSON.stringify(X))}
+function readPage(id){
+  var a=null;
+  try{a=JSON.parse(get(KP+id))}catch(e){a=null}
+  if(!a||!Array.isArray(a.rows)){try{a=JSON.parse(get(KB+id))}catch(e){a=null}}
+  if(!a||!Array.isArray(a.rows))return null;
+  a.id=id;a.u=a.u||[];a.r=a.r||[];return a;
+}
+function makePage(name,c,rows){
+  var id='p'+(++X.n),p={id:id,name:name,c:c||0,dir:1,rows:rows||[],u:[],r:[]};
+  PG[id]=p;X.order.push(id);X.cur=id;savePage(p);saveIdx();return p;
+}
+function dropPage(id){
+  rm(KP+id);rm(KB+id);delete PG[id];
+  X.order=X.order.filter(function(x){return x!==id});
+  X.cur=X.order[0]||'';saveIdx();
+}
+function migrate(){
+  var d=null;try{d=JSON.parse(get('lvl1'))}catch(e){d=null}
+  if(!d||!d.S||!Array.isArray(d.S.pages))return;
+  d.S.pages.slice(0,MAX).forEach(function(o){
+    var p=makePage(o.name||'Сторінка',o.c||0,Array.isArray(o.rows)?o.rows:[]);p.dir=o.dir||1;savePage(p);
+  });
+  X.cur=X.order[0]||'';saveIdx();
+  if(!bad)rm('lvl1');
+}
+function loadAll(){
+  var ix=null;try{ix=JSON.parse(get(KI))}catch(e){ix=null}
+  if(ix&&Array.isArray(ix.order)){
+    X=ix;var lost=0;
+    X.order=X.order.filter(function(id){var p=readPage(id);if(p){PG[id]=p;return true}lost++;return false});
+    if(lost)loadMsg='Не вдалося прочитати сторінок: '+lost+'.';
+  }else migrate();
+  if(!PG[X.cur])X.cur=X.order[0]||'';
+}
+function apply(p,op){
+  var r=p.rows,inv;
+  if(op.t==='ins'){r.splice(op.i,0,op.row);inv={t:'del',i:op.i}}
+  else if(op.t==='del'){inv={t:'ins',i:op.i,row:r.splice(op.i,1)[0]}}
+  else{inv={t:'set',i:op.i,row:r[op.i]};r[op.i]=op.row}
+  return inv;
+}
+function act(op){var p=P();p.u.push(apply(p,op));if(p.u.length>200)p.u.shift();p.r=[];savePage(p);done()}
+/*ENDDATA*/
+
+/* Висота: 6 цифр (3+3), 5 цифр (3+2), 4 цифри (2+2); з крапкою; від 1000 м лише з крапкою */
+function parseH(raw){
+  var v=raw.trim().replace(',','.');
+  if(!/^\d+(\.\d+)?$/.test(v))return{err:1};
+  var a=v.split('.'),w,dd;
+  if(a.length===2){w=a[0];dd=a[1];if(dd.length>3||w.length>4)return{err:1}}
+  else{
+    var n=v.length;
+    if(n===6||n===5){w=v.slice(0,3);dd=v.slice(3)}
+    else if(n===4){w=v.slice(0,2);dd=v.slice(2)}
+    else return{err:1};
+  }
+  if(w.length>3&&w[0]==='0')return{err:1};
+  var big=w.length===4,digits=w.length+dd.length,warn=null,red=false;
+  if(!big){
+    if(digits===5)warn='Висота має бути шестизначною (наприклад 123456).';
+    else if(digits===4){warn='Висота має бути шестизначною (наприклад 123456).';red=true}
+    else if(digits!==6)return{err:1};
+  }
+  return{v:(big?w:('000'+w).slice(-3))+'.'+(dd+'000').slice(0,3),warn:warn,red:red};
+}
+/* Віха: 151 або 1.51; понад 2.70 м потребує підтвердження */
+function parseP(raw){
+  var v=raw.trim().replace(',','.');
+  if(!v)return{v:''};
+  if(/^\d{3}$/.test(v))v=v[0]+'.'+v.slice(1);
+  if(!/^\d(\.\d{1,2})?$/.test(v))return{err:1};
+  var x=parseFloat(v);
+  return{v:x.toFixed(2),warn:x>2.7?'Чи впевнені Ви у висоті віхи?':null};
+}
+function nextName(){
+  var r=P().rows;if(!r.length)return'';
+  var l=r[r.length-1].n,m=l.match(/^(.*?)(\d+)$/);if(!m)return'';
+  var dr=isT(l)?1:(P().dir||1),s=String(Math.max(0,+m[2]+dr));
+  if(m[2].length>1&&m[2][0]==='0')s=s.padStart(m[2].length,'0');
+  return m[1]+s;
+}
+function poleList(){var seen={},l=[],r=P().rows;for(var i=r.length-1;i>=0;i--){var p=r[i].p;if(p&&!seen[p]){seen[p]=1;l.push(p)}}return l}
+
+function loadForm(){
+  var r=P().rows;ack='';
+  if(edit>=0&&r[edit]){
+    $('#n').value=r[edit].n;$('#h').value=r[edit].h;$('#p').value=r[edit].p;
+    $('#add').textContent='Зберегти зміни';$('#cancel').style.display='';
+  }else{
+    edit=-1;$('#n').value=nextName();$('#h').value='';$('#p').value=r.length?r[r.length-1].p:'1.51';
+    $('#add').textContent='Записати';$('#cancel').style.display='none';
+  }
+  $('#msg').textContent='';$('#prev').textContent='';
+}
+function renderTabs(){
+  var h='<button id="addp" aria-label="Нова сторінка">+</button>';
+  X.order.forEach(function(id){var p=PG[id];h+='<button class="'+(id===X.cur?'on':'')+'" data-id="'+id+'">'+(p.c?'<i class="dot" style="background:'+DOT[p.c]+'"></i>':'')+esc(p.name)+'</button>'});
+  $('#tabs').innerHTML=h;
+}
+function renderChart(){
+  var rows=P().rows,pts=[];
+  rows.forEach(function(r,i){var v=parseFloat(r.h);if(!isNaN(v))pts.push({i:i,v:v,r:r})});
+  var box=$('#chart');
+  if(pts.length<2){box.innerHTML='<div class="empty">Профіль з’явиться після двох записів</div>';$('#stat').innerHTML='';$('#sel').textContent='';return}
+  var vs=pts.map(function(p){return p.v}),mn=Math.min.apply(null,vs),mx=Math.max.apply(null,vs);
+  var pad=(mx-mn)*0.15||0.5,lo=mn-pad,hi=mx+pad,Hh=170,top=14,bot=14;
+  var step=Math.max(30,(320-40)/(pts.length-1)),W=40+step*(pts.length-1);
+  function X_(k){return 20+k*step}
+  function Y(v){return top+(hi-v)/(hi-lo)*(Hh-top-bot)}
+  var s='<svg width="'+W+'" height="'+Hh+'" viewBox="0 0 '+W+' '+Hh+'">';
+  for(var k=1;k<pts.length;k++)s+='<line class="'+(pts[k].v>=pts[k-1].v?'up':'dn')+'" x1="'+X_(k-1)+'" y1="'+Y(pts[k-1].v)+'" x2="'+X_(k)+'" y2="'+Y(pts[k].v)+'" stroke-width="2.5" stroke-linecap="round"/>';
+  pts.forEach(function(p,k){s+='<circle class="'+(isT(p.r.n)?'':'pk')+(p.i===selIdx?' sel':'')+'" data-i="'+p.i+'" cx="'+X_(k)+'" cy="'+Y(p.v)+'" r="'+(p.i===selIdx?7:5)+'"/>'});
+  box.innerHTML=s+'</svg>';box.scrollLeft=box.scrollWidth;
+  var diff=pts[pts.length-1].v-pts[0].v;
+  $('#stat').innerHTML='<span>мін <b>'+mn.toFixed(3)+'</b></span><span>макс <b>'+mx.toFixed(3)+'</b></span><span>перепад <b>'+(diff>=0?'+':'')+diff.toFixed(3)+'</b></span>';
+  var r=rows[selIdx];
+  $('#sel').innerHTML=r?'<b>'+esc(r.n)+'</b> · '+esc(r.h)+' · віха '+esc(r.p||'—'):'';
+}
+function renderRows(){
+  var r=P().rows,h='';
+  for(var i=r.length-1;i>=0;i--)h+='<tr data-i="'+i+'" class="'+(isT(r[i].n)?'t ':'')+(i===edit?'ed':'')+'"><td class="num"><div>'+(i+1)+'</div></td><td><div>'+esc(r[i].n)+'</div></td><td class="num"><div'+(r[i].w?' class="wr"':'')+'>'+esc(r[i].h)+'</div></td><td class="num pole"><div>'+esc(r[i].p||'—')+'</div></td><td class="x"><button data-del="'+i+'" aria-label="Видалити запис">×</button></td></tr>';
+  if(!r.length)h='<tr><td colspan="5"><div class="empty">Немає записів.</div></td></tr>';
+  $('#rows').innerHTML=h;
+}
+function render(reset){
+  renderTabs();
+  var has=X.order.length>0;
+  $('#c0').style.display=has?'none':'';
+  ['cf','ct','cc','foot'].forEach(function(id){$('#'+id).style.display=has?'':'none'});
+  $('#mset').disabled=!has;$('#exp').disabled=!has;
+  if(!has){document.body.className='';$('#undo').disabled=true;$('#redo').disabled=true;return}
+  var p=P();
+  $('#undo').disabled=!p.u.length;$('#redo').disabled=!p.r.length;
+  renderChart();renderRows();
+  $('#dm').className=(p.dir===-1)?'on':'';$('#dp').className=(p.dir===-1)?'':'on';
+  document.body.className='c'+(p.c||0);
+  if(reset)loadForm();
+}
+function theme(){document.body.className='c'+(X.order.length?(P().c||0):0)}
+function info(t){$('#ip').textContent=t;$('#ov5').classList.add('show')}
+
+function add(){
+  var n=$('#n').value.trim(),m=$('#msg');
+  if(!n){m.textContent='Вкажіть назву пікета';return}
+  if(/[,;\t]/.test(n)){m.textContent='У назві пікета не допускаються коми та крапки з комою';return}
+  var hr=parseH($('#h').value);
+  if(hr.err){m.textContent='Висота: шість цифр (123456) або з крапкою (123.456)';return}
+  var pr=parseP($('#p').value);
+  if(pr.err){m.textContent='Віха: три цифри (151) або з крапкою (1.51)';return}
+  var rows=P().rows,pv=edit>=0?rows[edit-1]:rows[rows.length-1],w=[];
+  if(hr.warn)w.push(hr.warn);
+  if(pv&&Math.abs(parseFloat(hr.v)-parseFloat(pv.h))>5)w.push('Різниця висот із попереднім записом понад 5 м. Чи впевнені Ви у висоті?');
+  if(pr.warn)w.push(pr.warn);
+  var key=n+'|'+$('#h').value+'|'+$('#p').value+'|'+edit;
+  if(w.length&&ack!==key){ack=key;m.textContent=w.join('\n');return}
+  var row={n:n,h:hr.v,p:pr.v};if(hr.red)row.w=1;
+  if(edit>=0)act({t:'set',i:edit,row:row});else act({t:'ins',i:rows.length,row:row});
+  edit=-1;selIdx=-1;ack='';render(true);$('#h').focus();
+}
+function prev(){
+  var rh=$('#h').value.trim().replace(',','.'),rp=$('#p').value.trim().replace(',','.'),h=parseH(rh),p=parseP(rp),t=[];
+  if(!h.err&&h.v!==rh)t.push('висота → '+h.v);
+  if(!p.err&&p.v&&p.v!==rp)t.push('віха → '+p.v);
+  $('#prev').textContent=t.join('   ');$('#msg').textContent='';
+}
+function mkSw(el,val,cb){
+  var h='';[5,2,1,3,4].forEach(function(i){h+='<button type="button" class="sw'+(i===val?' on':'')+'" data-c="'+i+'" aria-label="'+SWN[i]+'"></button>'});
+  el.innerHTML=h;
+  el.onclick=function(e){var b=e.target.closest('.sw');if(!b)return;var v=+b.dataset.c;if(v===val)v=0;mkSw(el,v,cb);cb(v)};
+}
+function limitHit(){if(X.order.length>=MAX){info('Ліміт: не можна створювати більше '+MAX+' сторінок.');return true}return false}
+function openNew(){
+  if(limitHit())return;
+  $('#nn').value='';nc=0;$('#nm').textContent='';
+  mkSw($('#nsw'),0,function(v){nc=v;document.body.className='c'+v});
+  document.body.className='c0';
+  $('#ov3').classList.add('show');setTimeout(function(){$('#nn').focus()},50);
+}
+function undo(){var p=P();if(!p||!p.u.length)return;p.r.push(apply(p,p.u.pop()));edit=-1;selIdx=-1;savePage(p);done();render(true)}
+function redo(){var p=P();if(!p||!p.r.length)return;p.u.push(apply(p,p.r.pop()));edit=-1;selIdx=-1;savePage(p);done();render(true)}
+
+$('#add').onclick=add;
+$('#cancel').onclick=function(){edit=-1;render(true)};
+$('#undo').onclick=undo;$('#redo').onclick=redo;
+function setDir(v){var p=P();p.dir=v;savePage(p);done();if(edit<0&&p.rows.length)$('#n').value=nextName();render()}
+$('#dm').onclick=function(){setDir(-1)};$('#dp').onclick=function(){setDir(1)};
+$('#n').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('#h').focus()}});
+$('#h').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('#p').focus()}});
+$('#p').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();add()}});
+$('#h').addEventListener('input',prev);$('#p').addEventListener('input',prev);
+['n','h','p'].forEach(function(id){$('#'+id).addEventListener('focus',function(){var el=this;setTimeout(function(){try{el.select()}catch(e){}},0)})});
+
+$('#pd').onclick=function(e){
+  e.stopPropagation();var l=poleList(),b=$('#pl');
+  b.innerHTML=l.length?l.map(function(p){return'<button type="button" data-p="'+p+'">'+p+'</button>'}).join(''):'<div class="pe">Немає раніше введених</div>';
+  b.classList.toggle('show');
+};
+$('#pl').addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(!b)return;$('#p').value=b.dataset.p;prev()});
+
+$('#tabs').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.id==='addp'){openNew();return}
+  X.cur=b.dataset.id;saveIdx();done();edit=-1;selIdx=-1;render(true);
+});
+$('#chart').addEventListener('click',function(e){
+  var c=e.target.closest('circle');if(!c)return;
+  selIdx=+c.dataset.i;var sc=$('#chart').scrollLeft;renderChart();$('#chart').scrollLeft=sc;
+});
+$('#rows').addEventListener('click',function(e){
+  var d=e.target.closest('[data-del]');
+  if(d){act({t:'del',i:+d.dataset.del});edit=-1;selIdx=-1;render(true);return}
+  var tr=e.target.closest('tr[data-i]');
+  if(tr){edit=+tr.dataset.i;render(true);window.scrollTo({top:0,behavior:'smooth'})}
+});
+$('#pn').addEventListener('change',function(){
+  var v=this.value.trim();if(!v){this.value=P().name;return}
+  P().name=v;savePage(P());done();render();
+});
+$('#pn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur()}});
+
+/* видалення сторінки */
+$('#del').onclick=function(){$('#dq').textContent='Ви впевнені, що хочете видалити сторінку «'+P().name+'»?';$('#ov6').classList.add('show')};
+$('#dno').onclick=function(){$('#ov6').classList.remove('show')};
+$('#dok').onclick=function(){$('#ov6').classList.remove('show');dropPage(X.cur);done();edit=-1;selIdx=-1;render(true)};
+$('#ik').onclick=function(){$('#ov5').classList.remove('show');theme()};
+
+/* меню */
+$('#more').onclick=function(e){e.stopPropagation();$('#menu').classList.toggle('show')};
+$('#menu').addEventListener('click',function(){this.classList.remove('show')});
+document.addEventListener('click',function(){$('#menu').classList.remove('show');$('#pl').classList.remove('show')});
+$('#mset').onclick=function(){
+  $('#pn').value=P().name;
+  mkSw($('#psw'),P().c||0,function(v){P().c=v;savePage(P());done();render()});
+  $('#ov4').classList.add('show');
+};
+$('#pc').onclick=function(){$('#ov4').classList.remove('show')};
+
+/* експорт */
+$('#exp').onclick=function(){
+  if(!X.order.length)return;
+  $('#out').value=P().rows.map(function(r){return r.n+','+r.h+','+r.p}).join('\n');
+  $('#cmsg').textContent='';$('#ov').classList.add('show');
+};
+$('#close').onclick=function(){$('#ov').classList.remove('show')};
+$('#copy').onclick=function(){
+  var ta=$('#out'),ok=false;ta.focus();ta.select();
+  try{ok=document.execCommand('copy')}catch(e){}
+  if(!ok&&navigator.clipboard){navigator.clipboard.writeText(ta.value).then(function(){$('#cmsg').textContent='Скопійовано'},function(){$('#cmsg').textContent='Не вдалося скопіювати. Виділіть текст вручну.'});return}
+  $('#cmsg').textContent=ok?'Скопійовано':'Не вдалося скопіювати. Виділіть текст вручну.';
+};
+
+/* імпорт */
+$('#imp').onclick=function(){if(limitHit())return;$('#in').value='';$('#it').value='';$('#im').textContent='';$('#ov2').classList.add('show');$('#it').focus()};
+$('#imc').onclick=function(){$('#ov2').classList.remove('show')};
+$('#imk').onclick=function(){
+  var rows=[],bad2=[],m=$('#im');
+  $('#it').value.split(/\r?\n/).forEach(function(line,i){
+    line=line.trim();if(!line)return;
+    var c=line.split(/[,;\t]/).map(function(x){return x.trim()}),n=c[0],h=parseH(c[1]||''),p=parseP(c[2]||'');
+    if(n&&!h.err&&!p.err){var r={n:n,h:h.v,p:p.v};if(h.red)r.w=1;rows.push(r)}else bad2.push(i+1);
+  });
+  if(bad2.length){m.textContent='Не вдалося прочитати рядки: '+bad2.slice(0,10).join(', ')+(bad2.length>10?'…':'')+'. Виправте або видаліть їх і повторіть спробу.';return}
+  if(!rows.length){m.textContent='Немає даних для імпорту. Формат рядка: пікет,висота,віха';return}
+  makePage($('#in').value.trim()||'Імпорт',0,rows);done();
+  edit=-1;selIdx=-1;render(true);$('#ov2').classList.remove('show');
+};
+
+/* нове нівелювання */
+$('#nok').onclick=function(){
+  var nm=$('#nn').value.trim();
+  if(!nm){$('#nm').textContent='Вкажіть назву або дату';return}
+  makePage(nm,nc,[]);done();edit=-1;selIdx=-1;render(true);$('#ov3').classList.remove('show');
+};
+$('#nc').onclick=function(){$('#ov3').classList.remove('show');theme()};
+$('#nn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('#nok').click()}});
+$('#nd').onclick=function(){var d=new Date(),f=function(x){return String(x).padStart(2,'0')};$('#nn').value=f(d.getDate())+'.'+f(d.getMonth()+1)+'.'+d.getFullYear()};
+
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+loadAll();done();render(true);
+if(!X.order.length)openNew();
+})();
+</script>
+</body>
+</html>
